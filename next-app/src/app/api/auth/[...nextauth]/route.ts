@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getCsrfToken } from "next-auth/react";
@@ -17,8 +18,8 @@ export const authOptions = {
             JSON.parse(credentials?.message || "{}")
           );
 
-          // This is a workaround for NextAuth version 5 to get the nonce
-          // In a real app, you'd want a more robust way to get the nonce
+          // 这是 NextAuth 第5版中获取 nonce 的一种变通方法
+          // 在一个真实的应用中，你想要一个更健壮的方式来获取 nonce
           const nonce = await getCsrfToken({
             req: { headers: req.headers },
           });
