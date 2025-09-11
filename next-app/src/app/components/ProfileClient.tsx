@@ -41,8 +41,12 @@ export const ProfileClient = ({
         const data = await response.json();
         setNickname(data.nickname || "");
         setCurrentNickname(data.nickname || "");
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("未知错误");
+        }
       } finally {
         setIsLoading(false);
       }
@@ -71,8 +75,12 @@ export const ProfileClient = ({
       const data = await response.json();
       setCurrentNickname(data.nickname);
       alert("Nickname updated successfully!");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("未知错误");
+      }
     } finally {
       setIsUpdating(false);
     }

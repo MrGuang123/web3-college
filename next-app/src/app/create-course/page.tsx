@@ -9,15 +9,13 @@ export default function CreateCoursePage() {
           href="/"
           className="text-blue-500 hover:underline mb-8 block"
         >
-          &larr; Back to Market
+          &larr; 回到首页&apos;
         </Link>
         <h1 className="text-3xl font-bold mb-6">
-          Create a New Course
+          创建新课程
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mb-8">
-          Fill out the details below to publish your course
-          on the blockchain. Once created, it will be
-          available for all users to purchase.
+          填写以下详细信息，将你的课程发布到区块链上。一旦创建，它将可供所有用户购买。
         </p>
         <CreateCourseForm />
       </div>

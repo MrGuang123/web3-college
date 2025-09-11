@@ -53,7 +53,7 @@ export const CourseList = () => {
     );
   }
 
-  if (!courses || courses.length === 0) {
+  if (!courses || (courses as Course[]).length === 0) {
     return (
       <div>
         <p>No courses have been created yet.</p>

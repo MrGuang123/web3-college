@@ -82,7 +82,7 @@ export const CourseDetail = ({
     isConnected &&
     courseDetails &&
     allowance !== undefined &&
-    allowance < courseDetails.price;
+    (allowance as number) < courseDetails.price;
 
   // --- Effects ---
   // When an approval is confirmed, refetch the allowance to update the UI
@@ -162,7 +162,7 @@ export const CourseDetail = ({
           {formatEther(courseDetails.price)} YD
         </p>
 
-        {isConnected && isEnrolled && (
+        {isConnected && !!isEnrolled && (
           <div className="bg-green-100 text-green-800 p-4 rounded-md text-center font-semibold">
             You are enrolled in this course!
           </div>

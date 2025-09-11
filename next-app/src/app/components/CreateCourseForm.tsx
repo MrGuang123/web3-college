@@ -6,6 +6,8 @@ import { useWriteContract } from "wagmi";
 import { contracts } from "@/lib/contracts";
 import { parseEther } from "viem";
 
+// 创建数据的元数据URL可以是IPFS(InterPlanetary File System, 星际文件系统)这个去中心化存储网络中，也可以存储在web2的中心化存储网络中，
+
 export const CreateCourseForm = () => {
   const { isConnected } = useAccount();
   const {
@@ -23,7 +25,7 @@ export const CreateCourseForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !price) {
-      alert("Please fill in all fields.");
+      alert("请填写所有字段。");
       return;
     }
 
@@ -33,8 +35,8 @@ export const CreateCourseForm = () => {
       functionName: "createCourse",
       args: [
         title,
-        "ipfs://placeholder", // Using a placeholder for metadata URL for now
-        parseEther(price), // Convert YD amount to the smallest unit (like wei)
+        "ipfs://placeholder", // 使用一个占位符作为元数据 URL 现在
+        parseEther(price), // 将 YD 金额转换为最小的单位 (如 wei)
       ],
     });
   };
@@ -42,7 +44,7 @@ export const CreateCourseForm = () => {
   if (!isConnected) {
     return (
       <p className="text-center text-yellow-600 bg-yellow-100 p-4 rounded-md">
-        Please connect your wallet to create a course.
+        请连接你的钱包来创建课程。
       </p>
     );
   }
@@ -57,7 +59,7 @@ export const CreateCourseForm = () => {
           htmlFor="title"
           className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
-          Course Title
+          课程标题
         </label>
         <input
           type="text"
@@ -74,7 +76,7 @@ export const CreateCourseForm = () => {
           htmlFor="price"
           className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
-          Price (in YD tokens)
+          价格 (以 YD 代币计)
         </label>
         <input
           type="number"
@@ -93,27 +95,27 @@ export const CreateCourseForm = () => {
         disabled={isPending}
         className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
       >
-        {isPending ? "Creating..." : "Create Course"}
+        {isPending ? "创建中..." : "创建课程"}
       </button>
 
       {isSuccess && (
         <div className="text-green-600 bg-green-100 p-3 rounded-md">
-          <p>Course created successfully!</p>
+          <p>课程创建成功！</p>
           <a
             href={`https://sepolia.etherscan.io/tx/${hash}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm underline"
           >
-            View on Etherscan
+            在 Etherscan 上查看
           </a>
         </div>
       )}
       {isError && (
         <div className="text-red-600 bg-red-100 p-3 rounded-md">
-          <p>Error creating course:</p>
+          <p>创建课程错误：</p>
           <p className="text-sm break-words">
-            {error?.message || "An unknown error occurred."}
+            {error?.message || "未知错误。"}
           </p>
         </div>
       )}

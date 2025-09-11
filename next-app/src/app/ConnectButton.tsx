@@ -26,6 +26,7 @@ export const ConnectButton = () => {
   const handleSignIn = async () => {
     try {
       setIsSigning(true);
+      // 用于创建和解析符合 EIP-4361 (Sign-In with Ethereum) 标准的签名消息
       const message = new SiweMessage({
         domain: window.location.host,
         address: address,
@@ -36,9 +37,15 @@ export const ConnectButton = () => {
         chainId: chainId,
         // nonce is handled by NextAuth
       });
+      // 提供 signMessageAsync 函数。这是实现“通过以太坊登录 (Sign-In with Ethereum, SIWE)” 的核心。
+      // 调用它会请求用户的钱包对一条特定的消息进行签名。这个签名就像是用户的数字密码，
+      // 可以证明消息确实来自于持有该钱包私钥的人，且无法被伪造。
       const signature = await signMessageAsync({
         message: message.prepareMessage(),
       });
+      // 一个函数，用于触发登录流程。在我们的代码中，它调用的是我们在后端 API
+      //  ([...nextauth]/route.ts) 中定义的 credentials 提供者。
+      // 我们会把钱包签名后的消息和签名本身作为“凭证”传给它。
       await signIn("credentials", {
         message: JSON.stringify(message),
         redirect: false,

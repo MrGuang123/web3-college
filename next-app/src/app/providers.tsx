@@ -7,38 +7,34 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import {
-  ConnectKitProvider,
-  getDefaultConfig,
-} from "connectkit";
+import { ConnectKitProvider } from "connectkit";
 import { SessionProvider } from "next-auth/react";
+import { injected } from "wagmi/connectors";
 
-const config = createConfig(
-  getDefaultConfig({
-    // Your dApps chains
-    chains: [hardhat, sepolia],
-    transports: {
-      // RPC URL for each chain
-      [hardhat.id]: http("http://127.0.0.1:8545"),
-      [sepolia.id]: http(
-        `https://eth-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`
-      ),
-    },
-
-    // Required API Keys
-    walletConnectProjectId:
-      process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
-
-    // dApp Information
-    appName: "Web3 College",
-
-    // Optional App Info
-    appDescription:
-      "A decentralized platform for online courses.",
-    appUrl: "https://family.co", // your app's url
-    appIcon: "https://family.co/logo.png", // your app's icon, no bigger than 1024x1024px (max. 1MB)
-  })
-);
+// 手动创建配置
+const config = createConfig({
+  chains: [hardhat, sepolia],
+  transports: {
+    [hardhat.id]: http("http://127.0.0.1:8545"),
+    [sepolia.id]: http(
+      `https://eth-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`
+    ),
+  },
+  connectors: [
+    injected({
+      // dApp 元数据作为 injected 连接器的一部分提供
+      // 这样钱包插件弹窗时会显示这些信息
+      target: {
+        id: "injected",
+        name: "Web3 College",
+        provider:
+          typeof window !== "undefined"
+            ? window.ethereum
+            : undefined,
+      },
+    }),
+  ],
+});
 
 const queryClient = new QueryClient();
 
@@ -51,7 +47,12 @@ export const Web3Provider = ({
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <SessionProvider>
-          <ConnectKitProvider>
+          <ConnectKitProvider
+            customTheme={{
+              "--ck-connectbutton-background": "#373737",
+              "--ck-connectbutton-border-radius": "8px",
+            }}
+          >
             {children}
           </ConnectKitProvider>
         </SessionProvider>
